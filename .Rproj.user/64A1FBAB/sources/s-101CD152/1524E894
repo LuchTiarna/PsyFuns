@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562080668213.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "1524E894",
+    "lastKnownWriteTime" : 1561531228,
+    "last_content_update" : 1561531228,
+    "path" : "~/Desktop/Bakalarka/PsyFuns/R/def_fixed_gamma_lambda.R",
+    "project_path" : "R/def_fixed_gamma_lambda.R",
+    "properties" : {
+        "cursorPosition" : "28,15",
+        "scrollLine" : "15"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

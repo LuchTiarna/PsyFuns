@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562065143307.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D59D9F1F",
+    "lastKnownWriteTime" : 1557256308,
+    "last_content_update" : 1557256308,
+    "path" : "~/Desktop/Bakalarka/PsyFuns/R/primalParamsDef.R",
+    "project_path" : "R/primalParamsDef.R",
+    "properties" : {
+        "cursorPosition" : "14,20",
+        "scrollLine" : "3"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1562080669781.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5333E26A",
+    "lastKnownWriteTime" : 1562080825,
+    "last_content_update" : 1562080825653,
+    "path" : "~/Desktop/Bakalarka/PsyFuns/R/def_fixed_gamma.R",
+    "project_path" : "R/def_fixed_gamma.R",
+    "properties" : {
+        "cursorPosition" : "74,56",
+        "scrollLine" : "56"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

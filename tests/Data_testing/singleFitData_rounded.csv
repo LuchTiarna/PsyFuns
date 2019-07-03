@@ -1,0 +1,7 @@
+"sigmoid","core","gamma","lambda","param1","param2","level","obsNumber","hitPercentage","simulatedHitPercentage"
+"gumbel_r","ab",0,0,1.8167435,0.5,0,5,0,0
+"gumbel_r","ab",0,0,1.8167435,0.5,1.75,10,0.3,0.4
+"gumbel_r","ab",0,0,1.8167435,0.5,1.96875,20,0.5,0.5
+"gumbel_r","ab",0,0,1.8167435,0.5,2.0625,20,0.55,0.65
+"gumbel_r","ab",0,0,1.8167435,0.5,2.5,10,0.8,0.8
+"gumbel_r","ab",0,0,1.8167435,0.5,6,5,1,1
