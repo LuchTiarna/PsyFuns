@@ -14,6 +14,8 @@
 \alias{polynom.inverse_x.pdf_x}
 \title{Polynom}
 \usage{
+polynom(x, params)
+
 polynom.orig(x, params)
 
 polynom.inverse(x, params)

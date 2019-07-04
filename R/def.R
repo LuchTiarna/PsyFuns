@@ -28,16 +28,11 @@ def <- function(data, sigmoid, core, par=NULL, fn=NULL, gr=NULL, ...,
   if(is.null(par)){
 
     ##gamma, lambda adjusting
-      ga <- min(data$yes / (data$yes + data$no))
-      la <- max(data$yes / (data$yes + data$no))
-
-      if(ga <= 0){ ga <- .Machine$double.xmin}
-      if(ga > 0.89){ ga <- 0.89}
-      if(la < 0.90){ la <- 0.90}
-      if(la >= 1){ la <- 1 - .Machine$double.neg.eps}
+      ga <- .Machine$double.xmin
+      la <- 1 - .Machine$double.neg.eps
 
       ##inner parameter adjusting
-      primPar <- primalParamsDef(sigmoidi, corei_x, data)
+      primPar <- primalParamsDef(sigmoidi, corei_x, ga, 1-la, data)
 
     par=c(sigmoidi(ga),sigmoidi(la), primPar)
   } #TODO

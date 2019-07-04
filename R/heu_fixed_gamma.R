@@ -1,6 +1,6 @@
 #'def
 #'
-#'Default algorithm for fitting parameters of psychometric function. Version of algorithm with fixed gamma parameter. Gamma has to be specifed.
+#'Heuristically improved algorithm for fitting parameters of psychometric function. Version of algorithm with fixed gamma parameter. Gamma has to be specifed.
 #'
 #'@param data Specifies the data set on which the function will be fitted.  Data have to be formated in specified way - data.frame/tibble (yes, no, predictor columns).
 #'@param gamma sets the loves boundary of function
@@ -11,7 +11,7 @@
 #'@return vector of return values
 #'@export
 #'
-deoptim_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NULL, gr=NULL, ...,
+heu_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NULL, gr=NULL, ...,
                             method = c("Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"),
                             lower = -Inf, upper = Inf,
                             control = list(), hessian = FALSE){
@@ -46,17 +46,31 @@ deoptim_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NUL
     guard_u <- max(corei_x(sigmoidi(0.5), fitUpper$par[-c(1)]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
     guard_l <- min(corei_x(sigmoidi(0.5), fitUpper$par[-c(1)]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
 
-    par_u <- fitUpper$par
-    par_l <- fitLower$par
-
-    lower <- ifelse(par_u > par_l, par_l, par_u)
-    upper <- ifelse(par_u > par_l, par_u, par_l)
-
     ## if results of primal fitting are different fitting will continue
+    value_old <- max(fitUpper$value, fitLower$value)
+    value_new <- min(fitUpper$value, fitLower$value)
 
-    fit <- DEoptim::DEoptim(fn=fn, lower=lower, upper=upper,
-                            control=DEoptim::DEoptim.control(itermax = 1000, trace = FALSE),
-                            gamma, guard_u, guard_l, sigmoidf, sigmoidi, coref, corei_x, data)
+    countdown <- 20
+    while (value_old > value_new && countdown > 0) {
+      countdown <- countdown - 1
+      fitUpper_old <- fitUpper
+      fitLower_old <- fitLower
+      value_old <- value_new
+      parUp <- c(l_up,fitLower_old$par[-c(1)])
+      parLow <- c(l_low,fitUpper_old$par[-c(1)])
+      fitUpper <- tryCatch({stats::optim(par=parUp,  fn=fn, gr=gr, gamma, guard_u, guard_l, sigmoidf, sigmoidi, coref, corei_x, data, method=method, lower=lower, upper=upper, control=control)})
+      fitLower <- tryCatch({stats::optim(par=parLow, fn=fn, gr=gr, gamma, guard_u, guard_l, sigmoidf, sigmoidi, coref, corei_x, data, method=method, lower=lower, upper=upper, control=control)})
+
+      guard_u_new <- max(corei_x(sigmoidi(0.5), fitUpper$par[-1]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
+      guard_l_new <- min(corei_x(sigmoidi(0.5), fitUpper$par[-1]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
+
+      guard_u <- max(guard_u_new, guard_u)
+      guard_l <- max(guard_l_new, guard_l)
+
+      value_new <- min(fitUpper$value, fitLower$value)
+    }
+    if(fitUpper_old$value < fitLower_old$value){ fit <- fitUpper}
+    else{fit <- fitLower }
 
   }else{
     #TODO

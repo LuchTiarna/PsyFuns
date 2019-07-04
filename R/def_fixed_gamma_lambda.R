@@ -33,7 +33,7 @@ def_fixed_gamma_lambda <- function(data, sigmoid, core, gamma=0.05, lambda=0.05,
 
   if(is.null(par)){
     ##inner parameter adjusting
-    primPar <- primalParamsDef(sigmoidi, corei_x, data)
+    primPar <- primalParamsDef(sigmoidi, corei_x, gamma, lambda, data)
     par=c(primPar)
   } #TODO
 
