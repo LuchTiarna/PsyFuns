@@ -11,7 +11,7 @@
 #'@return vector of return values
 #'@export
 #'
-deoptim_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NULL, gr=NULL, ...,
+def_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NULL, gr=NULL, ...,
                             method = c("Nelder-Mead", "BFGS", "CG", "L-BFGS-B", "SANN", "Brent"),
                             lower = -Inf, upper = Inf,
                             control = list(), hessian = FALSE){
@@ -29,41 +29,24 @@ deoptim_fixed_gamma <- function(data, sigmoid, core, gamma=0.05,par=NULL, fn=NUL
   }else{default_fn=FALSE} #if fn is not specified the most-likelihood function is used
 
   if(is.null(par)){
+    la <- max(data$yes / (data$yes + data$no))
+
+    ## lambda adjusting
+    if(la >= 1){ la <- 1 - .Machine$double.neg.eps}
+    if(la < 0.90){ la <- 0.90}
+
     ##inner parameter adjusting
     primPar <- primalParamsDef(sigmoidi, corei_x, data)
-    par=c(primPar)
-    l_up <- sigmoidi(1-.Machine$double.neg.eps)
-    l_low <- sigmoidi(min(0.95, max(data$yes/(data$yes+data$no))))
-  } #TODO
 
+    par=c(sigmoidi(la), primPar)
+  } #TODO
 
   fit <- NULL
   if(default_fn){
-    fitUpper <- tryCatch({stats::optim(par=c(l_up,par), fn=fn, gr=gr, gamma, max(data$predictor), min(data$predictor), sigmoidf, sigmoidi, coref, corei_x, data, method=method, lower=lower, upper=upper, control=control)})
-    fitLower <-tryCatch({stats::optim(par=c(l_low,par), fn=fn, gr=gr, gamma, max(data$predictor),min(data$predictor), sigmoidf, sigmoidi, coref, corei_x, data, method=method, lower=lower, upper=upper, control=control)})
-
-    #primal guards
-    guard_u <- max(corei_x(sigmoidi(0.5), fitUpper$par[-c(1)]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
-    guard_l <- min(corei_x(sigmoidi(0.5), fitUpper$par[-c(1)]),corei_x(sigmoidi(0.5), fitLower$par[-1]))
-
-    par_u <- fitUpper$par
-    par_l <- fitLower$par
-
-    lower <- ifelse(par_u > par_l, par_l, par_u)
-    upper <- ifelse(par_u > par_l, par_u, par_l)
-
-    ## if results of primal fitting are different fitting will continue
-
-    fit <- DEoptim::DEoptim(fn=fn, lower=lower, upper=upper,
-                            control=DEoptim::DEoptim.control(itermax = 1000, trace = FALSE),
-                            gamma, guard_u, guard_l, sigmoidf, sigmoidi, coref, corei_x, data)
-
+    fit <- tryCatch({stats::optim(par=par, fn=fn, gr=gr, gamma, max(data$predictor), min(data$predictor), sigmoidf, sigmoidi, coref, corei_x, data, method=method, lower=lower, upper=upper, control=control)})
   }else{
-    #TODO
-    par=c(sigmoidi(1-la), primPar)
     fit <- tryCatch({stats::optim(par=par, fn=fn, gr=gr, gamma, ..., method=method, lower=lower, upper=upper, control=control)})
   }
-
 
   if(!is.list(fit)){return(fit)}
 

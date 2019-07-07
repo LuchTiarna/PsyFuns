@@ -13,7 +13,7 @@
 
 PFm <- function(pf, predictor, observations, otherData=NULL, type=c("PC", "yes/no"), noise=FALSE, ...){
   if(length(predictor) != length(observations)){stop("Number of predictor and aboservations must be the same.")}
-  if(!is.null(otherData) && (is(otherData, "data.frame") || is(otherData, "tibble")) && nrow(otherData) != observations){ stop("Number of rows in other data must be the same as number of predictor.")}
+  if(!is.null(otherData) && (is(otherData, "data.frame") || is(otherData, "tibble")) && nrow(otherData) != length(observations)){ stop("Number of rows in other data must be the same as number of predictor.")}
   if(!is(pf, "PF")){stop("Object pf must be a PF type.")}
 
   #predicting the values
